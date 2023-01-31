@@ -1,0 +1,22 @@
+name: Run security scanner
+
+on:
+  push:
+    branches: [ '*' ]
+
+jobs:
+
+  vulnerability-scan:
+    name: Scan for vulnerabilities 🚨
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'docker.io/experimentalsoftware/example-java-project:2023-01-30T18.05'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+          output: 'vulnerabilities.file'
+          trivy-config: trivy.yaml
